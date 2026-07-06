@@ -91,10 +91,9 @@ export async function sendOrderEmail(
     await transporter.sendMail({
       from: process.env.SMTP_FROM || adminEmail,
       to: email,
-      subject: 'Order Confirmation - True Analyzers',
+      subject: 'Order Data - True Analyzers',
       html: `
-        <h2>Order Confirmation</h2>
-        <p>Thank you for your order!</p>
+        <h2>Order Data</h2>
         <p><strong>Plan:</strong> ${plan}</p>
         <p><strong>Price:</strong> $${price.toFixed(2)}</p>
         <p>We will contact you shortly with more details.</p>
