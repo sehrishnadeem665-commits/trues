@@ -34,7 +34,7 @@ function getTransporter() {
   });
 
   // Verify transporter asynchronously so we log configuration problems early in runtime logs.
-  transporter.verify((err, success) => {
+  transporter.verify((err: any, success: boolean) => {
     if (err) {
       console.error('SMTP verification failed:', {
         message: err?.message,
