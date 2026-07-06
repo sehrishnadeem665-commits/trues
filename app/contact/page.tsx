@@ -55,6 +55,8 @@ export default function ContactPage() {
         body: JSON.stringify(data),
       });
 
+      const body = await response.json();
+
       if (response.ok) {
         setIsSubmitted(true);
         toast({
@@ -63,12 +65,12 @@ export default function ContactPage() {
         });
         (e.target as HTMLFormElement).reset();
       } else {
-        throw new Error("Failed to send message");
+        throw new Error(body?.error || "Failed to send message");
       }
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again.",
+        description: error?.message || "Failed to send message. Please try again.",
         variant: "destructive",
       });
     } finally {

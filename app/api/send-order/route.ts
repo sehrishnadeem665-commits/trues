@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error in send-order route:", error);
     return NextResponse.json(
-      { error: "Failed to submit order" },
+      { error: String(error), stack: (error as any)?.stack },
       { status: 500 }
     );
   }

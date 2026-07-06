@@ -17,7 +17,9 @@ export async function POST(request: NextRequest) {
     // Send email if configured; do not fail the request if email cannot be sent.
     const emailSent = await sendContactEmail(name, email, subject, message);
     if (!emailSent) {
-      console.warn('Contact email was skipped or failed, but contact data will still be stored.');
+      console.warn(
+        'Contact email was skipped or failed, but contact data will still be stored.'
+      );
     }
 
     // Store in database
@@ -27,6 +29,15 @@ export async function POST(request: NextRequest) {
         "INSERT INTO contacts (name, email, subject, message, created_at) VALUES (?, ?, ?, ?, NOW())",
         [name, email, subject, message]
       );
+    } catch (dbError: any) {
+      console.error('DB insert error in send-contact route:', dbError);
+      return NextResponse.json(
+        {
+          error: dbError?.message || 'Database insert failed',
+          code: dbError?.code,
+        },
+        { status: 500 }
+      );
     } finally {
       connection.release();
     }
@@ -35,7 +46,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error in send-contact route:", error);
     return NextResponse.json(
-      { error: "Failed to send message" },
+      { error: String(error), stack: (error as any)?.stack },
       { status: 500 }
     );
   }
