@@ -14,8 +14,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send email
-    await sendOrderEmail(clientName, email, vinPlate, vehicleType, plan, price);
+    // Send email if configured; do not fail the request if email cannot be sent.
+    const emailSent = await sendOrderEmail(clientName, email, vinPlate, vehicleType, plan, price);
+    if (!emailSent) {
+      console.warn('Order email was skipped or failed, but order data will still be stored.');
+    }
 
     // Store in database
     const connection = await pool.getConnection();
@@ -28,7 +31,7 @@ export async function POST(request: NextRequest) {
       connection.release();
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, emailSent });
   } catch (error) {
     console.error("Error in send-order route:", error);
     return NextResponse.json(

@@ -11,7 +11,8 @@ function getTransporter() {
   const pass = process.env.SMTP_PASS;
 
   if (!host || !user || !pass) {
-    throw new Error('SMTP configuration is missing');
+    console.warn('SMTP configuration is missing; skipping email sending.');
+    return null;
   }
 
   transporter = nodemailer.createTransport({
@@ -33,8 +34,13 @@ export async function sendContactEmail(
   subject: string,
   message: string
 ) {
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.warn('Skipping contact email because SMTP is not configured.');
+    return false;
+  }
+
   try {
-    const transporter = getTransporter();
     const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_USER || 'noreply@trueanalyzers.com';
 
     await transporter.sendMail({
@@ -55,7 +61,7 @@ export async function sendContactEmail(
     return true;
   } catch (error) {
     console.error('Email send error:', error);
-    throw error;
+    return false;
   }
 }
 
@@ -67,8 +73,13 @@ export async function sendOrderEmail(
   plan: string,
   price: number
 ) {
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.warn('Skipping order email because SMTP is not configured.');
+    return false;
+  }
+
   try {
-    const transporter = getTransporter();
     const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_USER || 'noreply@trueanalyzers.com';
 
     await transporter.sendMail({
@@ -91,9 +102,10 @@ export async function sendOrderEmail(
     await transporter.sendMail({
       from: process.env.SMTP_FROM || adminEmail,
       to: email,
-      subject: 'Order Data - True Analyzers',
+      subject: 'Order Confirmation - True Analyzers',
       html: `
-        <h2>Order Data</h2>
+        <h2>Order Confirmation</h2>
+        <p>Thank you for your order!</p>
         <p><strong>Plan:</strong> ${plan}</p>
         <p><strong>Price:</strong> $${price.toFixed(2)}</p>
         <p>We will contact you shortly with more details.</p>
@@ -103,6 +115,6 @@ export async function sendOrderEmail(
     return true;
   } catch (error) {
     console.error('Email send error:', error);
-    throw error;
+    return false;
   }
 }
