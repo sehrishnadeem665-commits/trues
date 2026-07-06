@@ -1,6 +1,6 @@
-import nodemailer from 'nodemailer';
+import nodemailer, { Transporter } from 'nodemailer';
 
-let transporter: any = null;
+let transporter: Transporter | null = null;
 
 function getTransporter() {
   if (transporter) return transporter;
@@ -18,14 +18,39 @@ function getTransporter() {
   transporter = nodemailer.createTransport({
     host,
     port,
-    secure: port === 465,
+    secure: port === 587,
     auth: {
       user,
       pass,
     },
   });
 
+  // Verify transporter asynchronously so we log configuration problems early in runtime logs.
+  transporter.verify((err, success) => {
+    if (err) {
+      console.error('SMTP verification failed:', err);
+      // If verification fails, clear transporter so subsequent calls attempt to recreate or skip sending.
+      transporter = null;
+    } else {
+      console.info('SMTP transporter verified');
+    }
+  });
+
   return transporter;
+}
+
+export async function verifySmtp() {
+  const t = getTransporter();
+  if (!t) {
+    return { ok: false, error: 'SMTP not configured (missing SMTP_HOST/SMTP_USER/SMTP_PASS)' };
+  }
+
+  try {
+    await t.verify();
+    return { ok: true };
+  } catch (err: any) {
+    return { ok: false, error: err?.message || String(err), raw: err };
+  }
 }
 
 export async function sendContactEmail(
