@@ -9,27 +9,39 @@ function getTransporter() {
   const port = parseInt(process.env.SMTP_PORT || '587');
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
+  const envSecure = process.env.SMTP_SECURE;
+  const requireTLS = process.env.SMTP_REQUIRE_TLS === 'true';
 
   if (!host || !user || !pass) {
     console.warn('SMTP configuration is missing; skipping email sending.');
     return null;
   }
 
+  const secure = typeof envSecure === 'string'
+    ? envSecure.toLowerCase() === 'true'
+    : port === 465;
+
   transporter = nodemailer.createTransport({
     host,
     port,
-    secure: port === 587,
+    secure,
+    requireTLS,
     auth: {
       user,
       pass,
     },
+    tls: { rejectUnauthorized: false },
   });
 
   // Verify transporter asynchronously so we log configuration problems early in runtime logs.
   transporter.verify((err, success) => {
     if (err) {
-      console.error('SMTP verification failed:', err);
-      // If verification fails, clear transporter so subsequent calls attempt to recreate or skip sending.
+      console.error('SMTP verification failed:', {
+        message: err?.message,
+        code: err?.code,
+        response: err?.response,
+        responseCode: err?.responseCode,
+      });
       transporter = null;
     } else {
       console.info('SMTP transporter verified');
@@ -49,7 +61,15 @@ export async function verifySmtp() {
     await t.verify();
     return { ok: true };
   } catch (err: any) {
-    return { ok: false, error: err?.message || String(err), raw: err };
+    return {
+      ok: false,
+      error: err?.message || String(err),
+      code: err?.code,
+      response: err?.response,
+      responseCode: err?.responseCode,
+      stack: err?.stack,
+      raw: err,
+    };
   }
 }
 
