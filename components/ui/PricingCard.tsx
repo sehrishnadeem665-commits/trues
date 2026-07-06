@@ -90,7 +90,7 @@ const vehicleTypes = [
   "Boat",
   "Van",
   "Trailer",
-  "Bus",
+  "Fifth Wheel",
   "Other",
 ];
 
