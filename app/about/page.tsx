@@ -161,8 +161,8 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="order-2 lg:order-1">
               <div className="relative">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="relative rounded-2xl overflow-hidden shadow-lg">
+                <div className="grid grid-cols-1 gap-4">
+                  {/* <div className="relative rounded-2xl overflow-hidden shadow-lg">
                     <Image
                       src="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=600"
                       alt="Vehicle inspection"
@@ -170,7 +170,7 @@ export default function AboutPage() {
                       height={400}
                       className="w-full h-full object-cover"
                     />
-                  </div>
+                  </div> */}
                   <div className="relative rounded-2xl overflow-hidden shadow-lg mt-8">
                     <Image
                       src="https://images.pexels.com/photos/3769138/pexels-photo-3769138.jpeg?auto=compress&cs=tinysrgb&w=600"
@@ -406,7 +406,7 @@ export default function AboutPage() {
               variant="outline"
               className="border-white text-white hover:bg-purple-500 px-6 sm:px-8 py-5 sm:py-7 text-sm md:text-base"
             >
-              <Link href="/contact">Contact Us</Link>
+             
             </Button>
           </div>
         </div>

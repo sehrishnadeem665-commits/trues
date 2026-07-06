@@ -105,7 +105,7 @@ const faqData = [
   {
     question: "How quickly will I receive my vehicle information?",
     answer:
-      "Processing times vary by plan. Basic reports are delivered within 24 hours, Standard within 12 hours, and Premium reports are processed instantly. All reports are delivered directly to your email.",
+      "Processing times vary by plan. Basic reports are delivered within 2 - 4 hours, Standard within 4 - 8 hours, and Premium reports are processed within 1 hour. All reports are delivered directly to your email.",
   },
   {
     question: "What states do you cover?",
@@ -396,7 +396,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-16">
             <div className="relative rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://images.pexels.com/photos/3756965/pexels-photo-3756965.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                src="/review.jpg"
                 alt="Happy customer with new car"
                 width={600}
                 height={450}
