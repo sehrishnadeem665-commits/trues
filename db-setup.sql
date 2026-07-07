@@ -13,7 +13,9 @@ CREATE TABLE IF NOT EXISTS contacts (
   INDEX idx_email (email),
   INDEX idx_created (created_at)
 );
-
+CREATE USER 'trueanalyzers'@'localhost' IDENTIFIED BY '';
+GRANT ALL PRIVILEGES ON trueanalyzers.* TO 'trueanalyzers'@'localhost';
+FLUSH PRIVILEGES;
 -- Create orders table
 CREATE TABLE IF NOT EXISTS orders (
   id INT PRIMARY KEY AUTO_INCREMENT,

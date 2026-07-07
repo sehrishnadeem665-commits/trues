@@ -14,15 +14,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send email if configured; do not fail the request if email cannot be sent.
-    const emailSent = await sendContactEmail(name, email, subject, message);
-    if (!emailSent) {
-      console.warn(
-        'Contact email was skipped or failed, but contact data will still be stored.'
-      );
-    }
-
-    // Store in database
+    // Store in database first so the form submit succeeds quickly.
     const connection = await pool.getConnection();
     try {
       await connection.execute(
@@ -42,7 +34,17 @@ export async function POST(request: NextRequest) {
       connection.release();
     }
 
-    return NextResponse.json({ success: true, emailSent });
+    sendContactEmail(name, email, subject, message)
+      .then((emailSent) => {
+        if (!emailSent) {
+          console.error('Background contact email failed to send.');
+        }
+      })
+      .catch((err) => {
+        console.error('Background contact email error:', err);
+      });
+
+    return NextResponse.json({ success: true, message: 'Contact saved and email delivery started.' });
   } catch (error) {
     console.error("Error in send-contact route:", error);
     return NextResponse.json(

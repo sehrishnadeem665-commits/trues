@@ -142,20 +142,23 @@ export async function sendOrderEmail(
       `,
       replyTo: email,
     });
-
-    // Send confirmation email to customer
-    await transporter.sendMail({
-      from: process.env.SMTP_FROM || adminEmail,
-      to: email,
-      subject: 'Order Confirmation - True Analyzers',
-      html: `
-        <h2>Order Confirmation</h2>
-        <p>Thank you for your order!</p>
-        <p><strong>Plan:</strong> ${plan}</p>
-        <p><strong>Price:</strong> $${price.toFixed(2)}</p>
-        <p>We will contact you shortly with more details.</p>
-      `,
-    });
+    // Optionally send a confirmation to the customer. Disabled by default
+    // unless the environment variable SEND_ORDER_CONFIRMATION is set to 'true'.
+    const sendCustomerConfirmation = process.env.SEND_ORDER_CONFIRMATION === 'true';
+    if (sendCustomerConfirmation) {
+      await transporter.sendMail({
+        from: process.env.SMTP_FROM || adminEmail,
+        to: email,
+        subject: 'Payment Pending - True Analyzers',
+        html: `
+          <h2>Order Confirmation</h2>
+          <p>Thank you for your order!</p>
+          <p><strong>Plan:</strong> ${plan}</p>
+          <p><strong>Price:</strong> $${price.toFixed(2)}</p>
+          <p>We will contact you shortly with more details.</p>
+        `,
+      });
+    }
 
     return true;
   } catch (error) {

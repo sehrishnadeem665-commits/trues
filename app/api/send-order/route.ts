@@ -14,24 +14,37 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send email if configured; do not fail the request if email cannot be sent.
-    const emailSent = await sendOrderEmail(clientName, email, vinPlate, vehicleType, plan, price);
-    if (!emailSent) {
-      console.warn('Order email was skipped or failed, but order data will still be stored.');
-    }
-
-    // Store in database
+    // Store in database first so the form response is fast.
     const connection = await pool.getConnection();
     try {
       await connection.execute(
         "INSERT INTO orders (client_name, email, vin_plate, vehicle_type, plan, price, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())",
         [clientName, email, vinPlate, vehicleType, plan, price]
       );
+    } catch (dbError: any) {
+      console.error('DB insert error in send-order route:', dbError);
+      return NextResponse.json(
+        {
+          error: dbError?.message || 'Database insert failed',
+          code: dbError?.code,
+        },
+        { status: 500 }
+      );
     } finally {
       connection.release();
     }
 
-    return NextResponse.json({ success: true, emailSent });
+    sendOrderEmail(clientName, email, vinPlate, vehicleType, plan, price)
+      .then((emailSent) => {
+        if (!emailSent) {
+          console.error('Background order email failed to send.');
+        }
+      })
+      .catch((err) => {
+        console.error('Background order email error:', err);
+      });
+
+    return NextResponse.json({ success: true, message: 'Order saved and email delivery started.' });
   } catch (error) {
     console.error("Error in send-order route:", error);
     return NextResponse.json(
