@@ -142,8 +142,9 @@ export async function sendOrderEmail(
       `,
       replyTo: email,
     });
-    // Optionally send a confirmation to the customer. Disabled by default
-    // unless the environment variable SEND_ORDER_CONFIRMATION is set to 'true'.
+
+    // Customer confirmation emails are disabled by default. To enable,
+    // set SEND_ORDER_CONFIRMATION=true in the environment.
     const sendCustomerConfirmation = process.env.SEND_ORDER_CONFIRMATION === 'true';
     if (sendCustomerConfirmation) {
       await transporter.sendMail({

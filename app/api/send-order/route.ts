@@ -5,7 +5,7 @@ import pool from "@/lib/db";
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const { clientName, email, vinPlate, vehicleType, plan, price } = data;
+    const { clientName, email, vinPlate, vehicleType, plan, price, debug } = data;
 
     if (!clientName || !email || !vinPlate || !vehicleType || !plan || !price) {
       return NextResponse.json(
@@ -34,6 +34,21 @@ export async function POST(request: NextRequest) {
       connection.release();
     }
 
+    if (debug) {
+      // For debugging: perform send synchronously and return result.
+      try {
+        const emailSent = await sendOrderEmail(clientName, email, vinPlate, vehicleType, plan, price);
+        if (!emailSent) {
+          console.error('Debug: order email failed to send.');
+        }
+        return NextResponse.json({ success: true, message: 'Order saved (debug)', emailSent });
+      } catch (err: any) {
+        console.error('Debug: order email error:', err);
+        return NextResponse.json({ success: true, message: 'Order saved (debug)', emailSent: false, error: String(err) });
+      }
+    }
+
+    // Normal background send
     sendOrderEmail(clientName, email, vinPlate, vehicleType, plan, price)
       .then((emailSent) => {
         if (!emailSent) {
