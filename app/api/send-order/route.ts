@@ -14,24 +14,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Store in database first so the form response is fast.
-    const connection = await pool.getConnection();
+    // Try to store in database, but do NOT block email sending if DB fails.
+    let dbSaved = false;
     try {
-      await connection.execute(
-        "INSERT INTO orders (client_name, email, vin_plate, vehicle_type, plan, price, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())",
-        [clientName, email, vinPlate, vehicleType, plan, price]
-      );
-    } catch (dbError: any) {
-      console.error('DB insert error in send-order route:', dbError);
-      return NextResponse.json(
-        {
-          error: dbError?.message || 'Database insert failed',
-          code: dbError?.code,
-        },
-        { status: 500 }
-      );
-    } finally {
-      connection.release();
+      const connection = await pool.getConnection();
+      try {
+        await connection.execute(
+          "INSERT INTO orders (client_name, email, vin_plate, vehicle_type, plan, price, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())",
+          [clientName, email, vinPlate, vehicleType, plan, price]
+        );
+        dbSaved = true;
+      } catch (dbError: any) {
+        console.error('DB insert error in send-order route (continuing):', dbError);
+      } finally {
+        connection.release();
+      }
+    } catch (connErr: any) {
+      console.error('DB connection error in send-order route (continuing):', connErr);
     }
 
     if (debug) {
