@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Learn about True Analyzers - your trusted partner for comprehensive vehicle information services across the United States. We provide accurate VIN lookup, ownership records, and vehicle data.",
+    "Learn about True Analyzers - your trusted partner for comprehensive vehicle information services across the United Kingdom. We provide accurate VIN lookup, ownership records, and vehicle data.",
 };
 
 const values = [
@@ -48,7 +48,7 @@ const milestones = [
     year: "2021",
     title: "Nationwide Coverage",
     description:
-      "Expanded our database to cover all 50 states across the United States.",
+      "Expanded our database to cover the whole of the United Kingdom.",
   },
   {
     year: "2022",
@@ -117,7 +117,7 @@ export default function AboutPage() {
               </h1>
 
               <p className="mt-6 text-xs md:text-sm lg:text-base text-gray-600 leading-relaxed">
-                True Analyzers is dedicated to providing comprehensive, accurate vehicle data services across the United States. We help car buyers, sellers, and automotive professionals make informed decisions with reliable vehicle information.
+                True Analyzers is dedicated to providing comprehensive, accurate vehicle data services across the United Kingdom. We help car buyers, sellers, and automotive professionals make informed decisions with reliable vehicle information.
               </p>
 
               <div className="mt-8 flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
@@ -200,7 +200,7 @@ export default function AboutPage() {
                 Our Mission
               </h2>
               <p className="mt-6 text-xs md:text-sm lg:text-base text-gray-600 leading-relaxed">
-                At True Analyzers, our mission is to empower vehicle buyers and owners across the United States with accurate, comprehensive, and accessible vehicle information. We believe that informed decisions lead to better outcomes.
+                At True Analyzers, our mission is to empower vehicle buyers and owners across the United Kingdom with accurate, comprehensive, and accessible vehicle information. We believe that informed decisions lead to better outcomes.
               </p>
               <p className="mt-4 text-xs md:text-sm lg:text-base text-gray-600 leading-relaxed">
                 We aggregate data from multiple trusted sources including DMVs, insurance companies, and official government databases to provide you with the most complete picture of any vehicle's history.
@@ -208,7 +208,7 @@ export default function AboutPage() {
 
               <div className="mt-8 space-y-4">
                 {[
-                  "All 50 states covered with comprehensive data",
+                  "All four nations of the UK covered with comprehensive data",
                   "Data from trusted and verified sources",
                   "Fast delivery and excellent customer service",
                   "Clear, easy-to-understand reports",
@@ -351,7 +351,7 @@ export default function AboutPage() {
                 Serving Customers Nationwide
               </h2>
               <p className="mt-4 text-xs md:text-sm lg:text-base text-gray-600">
-                While our headquarters is based in the United States, we serve customers across all 50 states. Our digital-first approach allows us to deliver fast, reliable vehicle information no matter where you are.
+                While our headquarters is based in the United Kingdom, we serve customers across the whole of the UK. Our digital-first approach allows us to deliver fast, reliable vehicle information no matter where you are.
               </p>
               <div className="mt-8 grid grid-cols-2 gap-4">
                 <div className="p-3 md:p-4 bg-purple-50 rounded-xl">

@@ -138,7 +138,7 @@ export async function sendOrderEmail(
         <p><strong>VIN/Plate:</strong> ${vinPlate}</p>
         <p><strong>Vehicle Type:</strong> ${vehicleType}</p>
         <p><strong>Plan:</strong> ${plan}</p>
-        <p><strong>Price:</strong> $${price.toFixed(2)}</p>
+        <p><strong>Price:</strong> £${price.toFixed(2)}</p>
       `,
       replyTo: email,
     });
@@ -155,7 +155,7 @@ export async function sendOrderEmail(
           <h2>Order Confirmation</h2>
           <p>Thank you for your order!</p>
           <p><strong>Plan:</strong> ${plan}</p>
-          <p><strong>Price:</strong> $${price.toFixed(2)}</p>
+          <p><strong>Price:</strong> £${price.toFixed(2)}</p>
           <p>We will contact you shortly with more details.</p>
         `,
       });

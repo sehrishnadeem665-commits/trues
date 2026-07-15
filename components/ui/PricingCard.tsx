@@ -184,7 +184,7 @@ export default function PricingCard() {
                     plan.highlighted ? "text-white" : "text-purple-700"
                   )}
                 >
-                  ${plan.price}
+                  £{plan.price}
                 </span>
               </div>
               <p
@@ -248,7 +248,7 @@ export default function PricingCard() {
               {selectedPlan && (
                 <span>
                   You selected the <strong>{selectedPlan.name}</strong> plan at{" "}
-                  <strong className="text-purple-700">${selectedPlan.price}</strong>
+                  <strong className="text-purple-700">£{selectedPlan.price}</strong>
                 </span>
               )}
             </DialogDescription>

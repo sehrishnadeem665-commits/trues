@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: '%s | True Analyzers',
   },
   description:
-    'Get comprehensive vehicle digital PDF reports with VIN lookup, license plate search, and vehicle data services across the United States. Access ownership records, title records, accident records, mileage records, and more.',
+    'Get comprehensive vehicle digital PDF reports with VIN lookup, license plate search, and vehicle data services across the United Kingdom. Access ownership records, title records, accident records, mileage records, and more.',
   keywords: [
     'Vehicle Digital PDF Report',
     'VIN Lookup',
@@ -37,17 +37,17 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'True Analyzers | Vehicle Digital PDF Report & Trusted Information Services',
     description:
-      'Get comprehensive vehicle digital PDF reports with VIN lookup, license plate search, and vehicle data services across the United States.',
+      'Get comprehensive vehicle digital PDF reports with VIN lookup, license plate search, and vehicle data services across the United Kingdom.',
     url: 'https://trueanalyzers.com',
     siteName: 'True Analyzers',
-    locale: 'en_US',
+    locale: 'en_GB',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'True Analyzers | Vehicle Digital PDF Report & Trusted Information Services',
     description:
-      'Get comprehensive vehicle digital PDF reports with VIN lookup, license plate search, and vehicle data services across the United States.',
+      'Get comprehensive vehicle digital PDF reports with VIN lookup, license plate search, and vehicle data services across the United Kingdom.',
   },
   robots: {
     index: true,

@@ -136,15 +136,15 @@ export default function PricingPage() {
                     </th>
                     <th className="text-center py-3 sm:py-4 px-2 sm:px-4 text-xs md:text-sm font-semibold text-gray-900">
                       Basic
-                      <div className="text-purple-600 font-bold mt-1 text-xs md:text-sm">$30</div>
+                      <div className="text-purple-600 font-bold mt-1 text-xs md:text-sm">£30</div>
                     </th>
                     <th className="text-center py-3 sm:py-4 px-2 sm:px-4 text-xs md:text-sm font-semibold text-gray-900 bg-purple-50">
                       Standard
-                      <div className="text-purple-600 font-bold mt-1 text-xs md:text-sm">$40</div>
+                      <div className="text-purple-600 font-bold mt-1 text-xs md:text-sm">£40</div>
                     </th>
                     <th className="text-center py-3 sm:py-4 px-2 sm:px-4 text-xs md:text-sm font-semibold text-gray-900">
                       Premium
-                      <div className="text-purple-600 font-bold mt-1 text-xs md:text-sm">$50</div>
+                      <div className="text-purple-600 font-bold mt-1 text-xs md:text-sm">£50</div>
                     </th>
                   </tr>
                 </thead>

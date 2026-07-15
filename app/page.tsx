@@ -65,7 +65,7 @@ const features = [
 const stats = [
   { value: "500K+", label: "Reports Delivered" },
   { value: "99.9%", label: "Accuracy Rate" },
-  { value: "50", label: "States Covered" },
+  { value: "4", label: "Nations Covered" },
   { value: "24/7", label: "Support Available" },
 ];
 
@@ -110,7 +110,7 @@ const faqData = [
   {
     question: "What states do you cover?",
     answer:
-      "We provide comprehensive vehicle data for all 50 states across the United States. Our database includes records from DMVs, insurance companies, and other official sources nationwide.",
+      "We provide comprehensive vehicle data across the whole of the United Kingdom, including England, Scotland, Wales, and Northern Ireland. Our database includes records from official transport and insurance sources.",
   },
   {
     question: "Is my personal information secure?",
@@ -194,7 +194,7 @@ export default function Home() {
               <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-green-500" />
-                  <span className="text-xs md:text-sm text-gray-600">All 50 States</span>
+                  <span className="text-xs md:text-sm text-gray-600">UK-Wide Coverage</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-green-500" />
@@ -288,7 +288,7 @@ export default function Home() {
                 Comprehensive Vehicle Data Services
               </h2>
               <p className="mt-4 text-xs md:text-sm lg:text-base text-gray-600">
-                Get all the information you need to make confident decisions about any vehicle. Our advanced database covers millions of vehicles across all 50 states.
+                Get all the information you need to make confident decisions about any vehicle. Our advanced database covers millions of vehicles across the United Kingdom.
               </p>
             </div>
             <div className="relative rounded-2xl overflow-hidden shadow-xl">
@@ -423,7 +423,7 @@ export default function Home() {
                 Trusted by Thousands
               </h2>
               <p className="mt-4 text-xs md:text-sm lg:text-base text-gray-600">
-                See what our customers have to say about our services. Join thousands of satisfied vehicle owners across the United States.
+                See what our customers have to say about our services. Join thousands of satisfied vehicle owners across the United Kingdom.
               </p>
             </div>
           </div>

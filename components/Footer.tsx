@@ -35,7 +35,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-gray-600 text-sm leading-relaxed">
-              Providing comprehensive vehicle information services across the United States.
+              Providing comprehensive vehicle information services across the United Kingdom.
               Get accurate, reliable data for your automotive needs.
             </p>
             <div className="mt-6 space-y-3">
@@ -110,7 +110,7 @@ export default function Footer() {
               © {new Date().getFullYear()} True Analyzers. All rights reserved.
             </p>
             <p className="text-gray-400 text-xs">
-              Trusted vehicle information services across the United States
+              Trusted vehicle information services across the United Kingdom
             </p>
           </div>
         </div>
