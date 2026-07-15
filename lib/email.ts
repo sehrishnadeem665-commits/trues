@@ -2,6 +2,17 @@ import nodemailer, { Transporter } from 'nodemailer';
 
 let transporter: Transporter | null = null;
 
+function getFromAddress() {
+  return process.env.EMAIL_FROM || process.env.SMTP_FROM || process.env.ADMIN_EMAIL || process.env.SMTP_USER || 'noreply@trueanalyzers.com';
+}
+
+function getAdminRecipients() {
+  const recipients = [process.env.ADMIN_EMAIL, process.env.ADMIN_PAYMENT_EMAIL, process.env.SMTP_USER]
+    .filter((value): value is string => Boolean(value));
+
+  return Array.from(new Set(recipients));
+}
+
 function getTransporter() {
   if (transporter) return transporter;
 
@@ -86,11 +97,11 @@ export async function sendContactEmail(
   }
 
   try {
-    const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_USER || 'noreply@trueanalyzers.com';
-
-    await transporter.sendMail({
-      from: process.env.SMTP_FROM || adminEmail,
-      to: adminEmail,
+    const recipients = getAdminRecipients();
+    const fromAddress = getFromAddress();
+    const info = await transporter.sendMail({
+      from: fromAddress,
+      to: recipients,
       subject: `New Contact Form: ${subject}`,
       html: `
         <h2>New Contact Form Submission</h2>
@@ -103,7 +114,13 @@ export async function sendContactEmail(
       replyTo: email,
     });
 
-    return true;
+    console.info('Contact email send result', {
+      accepted: info.accepted,
+      rejected: info.rejected,
+      response: info.response,
+    });
+
+    return info.accepted.length > 0;
   } catch (error) {
     console.error('Email send error:', error);
     return false;
@@ -125,11 +142,12 @@ export async function sendOrderEmail(
   }
 
   try {
-    const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_USER || 'noreply@trueanalyzers.com';
+    const recipients = getAdminRecipients();
+    const fromAddress = getFromAddress();
 
-    await transporter.sendMail({
-      from: process.env.SMTP_FROM || adminEmail,
-      to: adminEmail,
+    const info = await transporter.sendMail({
+      from: fromAddress,
+      to: recipients,
       subject: `New Order from ${clientName}`,
       html: `
         <h2>New Order Submission</h2>
@@ -143,12 +161,18 @@ export async function sendOrderEmail(
       replyTo: email,
     });
 
+    console.info('Order email send result', {
+      accepted: info.accepted,
+      rejected: info.rejected,
+      response: info.response,
+    });
+
     // Customer confirmation emails are disabled by default. To enable,
     // set SEND_ORDER_CONFIRMATION=true in the environment.
     const sendCustomerConfirmation = process.env.SEND_ORDER_CONFIRMATION === 'true';
     if (sendCustomerConfirmation) {
       await transporter.sendMail({
-        from: process.env.SMTP_FROM || adminEmail,
+        from: fromAddress,
         to: email,
         subject: 'Payment Pending - True Analyzers',
         html: `
@@ -161,7 +185,7 @@ export async function sendOrderEmail(
       });
     }
 
-    return true;
+    return info.accepted.length > 0;
   } catch (error) {
     console.error('Email send error:', error);
     return false;
