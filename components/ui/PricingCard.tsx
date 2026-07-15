@@ -35,7 +35,7 @@ interface PricingPlan {
 const plans: PricingPlan[] = [
   {
     name: "Basic",
-    price: 30,
+    price: 35,
     description: "Essential vehicle information for your needs",
     features: [
       "VIN / License Plate Lookup",
@@ -45,11 +45,11 @@ const plans: PricingPlan[] = [
       "Email Delivery",
       "24-Hour Processing",
     ],
-    paypalLink: "https://www.paypal.com/ncp/payment/JNMZYYNTSDBMS",
+    paypalLink: "https://buy.stripe.com/00w7sL6hx0Nxbkp5k6bo403",
   },
   {
     name: "Standard",
-    price: 40,
+    price: 45,
     description: "Comprehensive vehicle data with detailed insights",
     features: [
       "Everything in Basic",
@@ -60,11 +60,11 @@ const plans: PricingPlan[] = [
       "Priority Processing",
     ],
     highlighted: true,
-    paypalLink: "https://www.paypal.com/ncp/payment/66GYGHME3VVT6",
+    paypalLink: "https://buy.stripe.com/fZu7sL5dtao7gEJ3bYbo401",
   },
   {
     name: "Premium",
-    price: 50,
+    price: 55,
     description: "Complete vehicle analysis with premium support",
     features: [
       "Everything in Standard",
@@ -74,7 +74,7 @@ const plans: PricingPlan[] = [
       "Priority Email Support",
       "Instant Processing",
     ],
-    paypalLink: "https://www.paypal.com/ncp/payment/6EJPMQPDWCXWE",
+    paypalLink: "https://buy.stripe.com/00w9ATdJZgMvaglcMybo402",
   },
 ];
 
@@ -103,7 +103,7 @@ export default function PricingCard() {
     e.preventDefault();
     if (!selectedPlan) return;
 
-    // Send order in background and navigate current tab to PayPal
+    // Send order in background and navigate current tab to Stripe
     setIsSubmitting(true);
     const formData = new FormData(e.currentTarget);
     const data = {
@@ -134,7 +134,7 @@ export default function PricingCard() {
       setSelectedPlan(null);
       (e.target as HTMLFormElement).reset();
 
-      // Navigate current tab to PayPal
+      // Navigate current tab to Stripe checkout
       window.location.href = selectedPlan.paypalLink;
     } catch (error) {
       toast({

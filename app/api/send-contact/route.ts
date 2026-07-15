@@ -14,37 +14,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Store in database first so the form submit succeeds quickly.
-    const connection = await pool.getConnection();
+    let savedToDb = false;
+
     try {
-      await connection.execute(
-        "INSERT INTO contacts (name, email, subject, message, created_at) VALUES (?, ?, ?, ?, NOW())",
-        [name, email, subject, message]
-      );
+      const connection = await pool.getConnection();
+      try {
+        await connection.execute(
+          "INSERT INTO contacts (name, email, subject, message, created_at) VALUES (?, ?, ?, ?, NOW())",
+          [name, email, subject, message]
+        );
+        savedToDb = true;
+      } finally {
+        connection.release();
+      }
     } catch (dbError: any) {
-      console.error('DB insert error in send-contact route:', dbError);
-      return NextResponse.json(
-        {
-          error: dbError?.message || 'Database insert failed',
-          code: dbError?.code,
-        },
-        { status: 500 }
-      );
-    } finally {
-      connection.release();
+      console.warn('DB insert unavailable; continuing with email send.', dbError?.message || dbError);
     }
 
-    sendContactEmail(name, email, subject, message)
-      .then((emailSent) => {
-        if (!emailSent) {
-          console.error('Background contact email failed to send.');
-        }
-      })
-      .catch((err) => {
-        console.error('Background contact email error:', err);
-      });
+    const emailSent = await sendContactEmail(name, email, subject, message);
 
-    return NextResponse.json({ success: true, message: 'Contact saved and email delivery started.' });
+    if (!emailSent) {
+      return NextResponse.json(
+        { success: false, message: 'Contact email delivery failed.' },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: savedToDb
+        ? 'Contact saved and email delivered.'
+        : 'Contact email delivered; database save was unavailable.',
+      savedToDb,
+      emailSent,
+    });
   } catch (error) {
     console.error("Error in send-contact route:", error);
     return NextResponse.json(
