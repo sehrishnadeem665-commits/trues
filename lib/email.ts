@@ -130,6 +130,7 @@ export async function sendContactEmail(
 export async function sendOrderEmail(
   clientName: string,
   email: string,
+  phone: string,
   vinPlate: string,
   vehicleType: string,
   plan: string,
@@ -153,6 +154,7 @@ export async function sendOrderEmail(
         <h2>New Order Submission</h2>
         <p><strong>Client Name:</strong> ${clientName}</p>
         <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
         <p><strong>VIN/Plate:</strong> ${vinPlate}</p>
         <p><strong>Vehicle Type:</strong> ${vehicleType}</p>
         <p><strong>Plan:</strong> ${plan}</p>

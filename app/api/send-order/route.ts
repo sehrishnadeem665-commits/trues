@@ -5,9 +5,9 @@ import pool from "@/lib/db";
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const { clientName, email, vinPlate, vehicleType, plan, price, debug } = data;
+    const { clientName, email, phone, vinPlate, vehicleType, plan, price, debug } = data;
 
-    if (!clientName || !email || !vinPlate || !vehicleType || !plan || !price) {
+    if (!clientName || !email || !phone || !vinPlate || !vehicleType || !plan || !price) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -20,8 +20,8 @@ export async function POST(request: NextRequest) {
       const connection = await pool.getConnection();
       try {
         await connection.execute(
-          "INSERT INTO orders (client_name, email, vin_plate, vehicle_type, plan, price, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())",
-          [clientName, email, vinPlate, vehicleType, plan, price]
+          "INSERT INTO orders (client_name, email, phone, vin_plate, vehicle_type, plan, price, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())",
+          [clientName, email, phone, vinPlate, vehicleType, plan, price]
         );
         dbSaved = true;
       } catch (dbError: any) {
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     if (debug) {
       // For debugging: perform send synchronously and return result.
       try {
-        const emailSent = await sendOrderEmail(clientName, email, vinPlate, vehicleType, plan, price);
+        const emailSent = await sendOrderEmail(clientName, email, phone, vinPlate, vehicleType, plan, price);
         if (!emailSent) {
           console.error('Debug: order email failed to send.');
         }
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Normal background send
-    sendOrderEmail(clientName, email, vinPlate, vehicleType, plan, price)
+    sendOrderEmail(clientName, email, phone, vinPlate, vehicleType, plan, price)
       .then((emailSent) => {
         if (!emailSent) {
           console.error('Background order email failed to send.');

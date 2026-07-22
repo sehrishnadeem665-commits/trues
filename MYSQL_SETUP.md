@@ -55,6 +55,7 @@ Delete the `supabase/` folder from your project as it's no longer needed.
 - `id`: Auto-increment primary key
 - `client_name`: Client name
 - `email`: Client email
+- `phone`: Client phone number
 - `vin_plate`: Vehicle VIN or plate
 - `vehicle_type`: Type of vehicle
 - `plan`: Service plan

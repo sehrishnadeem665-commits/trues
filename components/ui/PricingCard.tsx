@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -97,9 +97,60 @@ const vehicleTypes = [
 export default function PricingCard() {
   const [selectedPlan, setSelectedPlan] = useState<PricingPlan | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [phone, setPhone] = useState("");
   const { toast } = useToast();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const formatUkPhone = (value: string) => {
+    const digits = value.replace(/\D/g, "");
+    if (!digits) return "";
+
+    if (digits.startsWith("44")) {
+      const local = digits.slice(2);
+      return [
+        "+44",
+        local.slice(0, 4),
+        local.length > 4 ? local.slice(4, 7) : "",
+        local.length > 7 ? local.slice(7, 11) : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+    }
+
+    if (digits.startsWith("0")) {
+      const local = digits.slice(1);
+      return [
+        "0" + local.slice(0, 4),
+        local.length > 4 ? local.slice(4, 7) : "",
+        local.length > 7 ? local.slice(7, 11) : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+    }
+
+    if (digits.startsWith("7")) {
+      return [
+        "07" + digits.slice(1, 4),
+        digits.length > 4 ? digits.slice(4, 7) : "",
+        digits.length > 7 ? digits.slice(7, 11) : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+    }
+
+    return [
+      digits.slice(0, 3),
+      digits.length > 3 ? digits.slice(3, 6) : "",
+      digits.length > 6 ? digits.slice(6, 10) : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+  };
+
+  const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setPhone(formatUkPhone(event.target.value));
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!selectedPlan) return;
 
@@ -109,6 +160,7 @@ export default function PricingCard() {
     const data = {
       clientName: formData.get("clientName"),
       email: formData.get("email"),
+      phone: formData.get("phone"),
       vinPlate: formData.get("vinPlate"),
       vehicleType: formData.get("vehicleType"),
       plan: selectedPlan.name,
@@ -117,24 +169,29 @@ export default function PricingCard() {
 
     try {
       const payload = JSON.stringify(data);
+      const response = await fetch("/api/send-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+        keepalive: true,
+      });
 
-      if (typeof navigator !== "undefined" && "sendBeacon" in navigator) {
-        const blob = new Blob([payload], { type: "application/json" });
-        navigator.sendBeacon("/api/send-order", blob);
-      } else {
-        // Fallback: non-blocking fetch with keepalive
-        fetch("/api/send-order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: payload,
-          keepalive: true,
-        }).catch(() => {});
-      }
+      const result = await response.json().catch(() => ({}));
 
       setSelectedPlan(null);
       (e.target as HTMLFormElement).reset();
+      setPhone("");
 
-      // Navigate current tab to Stripe checkout
+      if (!response.ok) {
+        toast({
+          title: "Order submission issue",
+          description: result?.error || "The order could not be submitted.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Navigate current tab to payment checkout only after backend accepted the request.
       window.location.href = selectedPlan.paypalLink;
     } catch (error) {
       toast({
@@ -274,6 +331,21 @@ export default function PricingCard() {
                 name="email"
                 type="email"
                 placeholder="your@email.com"
+                required
+                className="border-purple-200 focus:border-purple-500 focus:ring-purple-500"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone Number</Label>
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="+44 7123 456 789"
+                value={phone}
+                onChange={handlePhoneChange}
+                inputMode="tel"
                 required
                 className="border-purple-200 focus:border-purple-500 focus:ring-purple-500"
               />
