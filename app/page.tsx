@@ -74,7 +74,7 @@ const testimonials = [
     quote:
       "True Analyzers provided exactly the information I needed before purchasing my used car. The detailed records saved me from a potential bad investment.",
     author: "Sarah M.",
-   
+    location: "London, UK",
     image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150",
     rating: 5,
   },
@@ -82,7 +82,7 @@ const testimonials = [
     quote:
       "Fast, accurate, and professional. I use their services for all my vehicle purchases now. Highly recommended for anyone in the market.",
     author: "James R.",
-  
+    location: "Manchester, UK",
     image: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150",
     rating: 5,
   },
@@ -90,7 +90,7 @@ const testimonials = [
     quote:
       "The ownership timeline feature was incredibly helpful. I could see exactly where the car had been and made an informed decision.",
     author: "Michael T.",
-   
+    location: "Birmingham, UK",
     image: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150",
     rating: 5,
   },
