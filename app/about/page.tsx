@@ -125,11 +125,11 @@ export default function AboutPage() {
                   <div className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-700">500K+</div>
                   <div className="text-xs sm:text-sm text-gray-500">Reports Delivered</div>
                 </div>
-                <div className="hidden sm:block w-px h-12 bg-gray-200"></div>
-                <div className="text-center">
+                {/* <div className="hidden sm:block w-px h-12 bg-gray-200"></div> */}
+                {/* <div className="text-center">
                   <div className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-700">50</div>
                   <div className="text-xs sm:text-sm text-gray-500">States Covered</div>
-                </div>
+                </div> */}
                 <div className="hidden sm:block w-px h-12 bg-gray-200"></div>
                 <div className="text-center">
                   <div className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-700">99.9%</div>
